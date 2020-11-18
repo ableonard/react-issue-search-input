@@ -1,0 +1,9 @@
+.searchInputWrapper {
+    margin: 0 auto;
+    width: max-content;
+}
+
+.searchInput {
+    font-size: 1.5em;
+    width: 600px;
+}

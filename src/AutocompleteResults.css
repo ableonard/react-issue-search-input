@@ -1,0 +1,34 @@
+.searchResults {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: max-content;
+    list-style: none;
+    text-align: left;
+}
+
+.searchResult {
+    border: 1px solid black;
+    width: auto;
+}
+
+.searchResult.active {
+    background-color: #c1750247;
+}
+
+.searchResult a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.issueTitle {
+    font-size: 0.8em;
+}
+
+.issueLabel {
+    font-size: 0.6em;
+    margin: 0 2px;
+    padding: 2px;
+    border: 1px solid;
+    border-radius: 5px;
+}
