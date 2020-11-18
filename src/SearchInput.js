@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import AutocompleteResults from './AutocompleteResults';
 
 import './SearchInput.css';
+import useDebounce from './useDebounce';
 
 const reactIssueQuery = gql`
     query searchReactIssues($searchQuery: String!) {
@@ -36,14 +37,15 @@ const dataToResults = (json) => {
 
 const SearchInput = () => {
     const [ searchText, setSearchText ] = useState("");
+    const debouncedSearchText = useDebounce(searchText, 300);
     const [ searchResults, setSearchResults ] = useState([]);
     const [ activeResultIndex, setActiveResult ] = useState(-1);
     const [ runQuery, { data } ] = useLazyQuery(reactIssueQuery);
     useEffect(() => {
-        if (searchText) {
-            runQuery({ variables: { searchQuery: `repo:facebook/react is:issue ${searchText}` }});
+        if (debouncedSearchText) {
+            runQuery({ variables: { searchQuery: `repo:facebook/react is:issue ${debouncedSearchText}` }});
         }
-    }, [searchText, runQuery]);
+    }, [debouncedSearchText, runQuery]);
     useEffect(() => {
         if (data) {
             setSearchResults(dataToResults(data));
