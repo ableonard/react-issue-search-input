@@ -37,6 +37,7 @@ const dataToResults = (json) => {
 const SearchInput = () => {
     const [ searchText, setSearchText ] = useState("");
     const [ searchResults, setSearchResults ] = useState([]);
+    const [ activeResultIndex, setActiveResult ] = useState(-1);
     const [ runQuery, { data } ] = useLazyQuery(reactIssueQuery);
     useEffect(() => {
         if (searchText) {
@@ -46,14 +47,26 @@ const SearchInput = () => {
     useEffect(() => {
         if (data) {
             setSearchResults(dataToResults(data));
+            setActiveResult(-1);
         }
-    }, [data, setSearchResults]);
+    }, [data, setSearchResults, setActiveResult]);
+
+    const onChange = (e) => { setSearchText(e.target.value) };
+    const onKeyDown = (e) => {
+        if (e.keyCode === 38 && activeResultIndex > -1) { // up arrow
+            setActiveResult(activeResultIndex - 1);
+        } else if (e.keyCode === 40 && activeResultIndex < searchResults.length - 1) { // down arrow
+            setActiveResult(activeResultIndex + 1);
+        } else if (e.keyCode === 13 && activeResultIndex > -1 && activeResultIndex < searchResults.length) { // enter key
+            window.location = searchResults[activeResultIndex].url;
+        }
+    }
 
     return (
         <div className="searchInputWrapper">
-            <input className="searchInput" placeholder="Enter Search Terms" onChange={(e) => { setSearchText(e.target.value) }} />
+            <input className="searchInput" onChange={onChange} onKeyDown={onKeyDown} placeholder="Enter Search Terms" />
             { searchResults && searchResults.length > 0 ?
-                <AutocompleteResults searchResults={searchResults} /> : null
+                <AutocompleteResults searchResults={searchResults} activeResultIndex={activeResultIndex} /> : null
             }
         </div>
     );
