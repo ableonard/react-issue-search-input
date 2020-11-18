@@ -42,12 +42,12 @@ const SearchInput = () => {
         if (searchText) {
             runQuery({ variables: { searchQuery: `repo:facebook/react is:issue ${searchText}` }});
         }
-    }, [searchText]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [searchText, runQuery]);
     useEffect(() => {
         if (data) {
             setSearchResults(dataToResults(data));
         }
-    }, [data]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [data, setSearchResults]);
 
     return (
         <div className="searchInputWrapper">
